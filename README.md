@@ -7,6 +7,9 @@ index="myindex"  fatal* OR err* OR exception* OR timeout* OR waiting* OR fail* O
 |rex "(?<_raw>[^\n]*)\n"
 
 ## Java Exceptions
+index="myindex" Caused* OR table* OR refuse* OR throw* OR ssl* OR "not found*" OR alert* OR db* OR sql* OR "not valid*" OR full* OR busy* OR down* OR terminate* OR timeout* OR "can't*" OR not* OR fault* OR fatal* OR informix* OR warn* OR fail* OR err* OR  Exception*   
+
+| rex field=source  "\/data\/(?<product>\w+)\/(?<date>\d+)\/(?<servername>\w+)" 
   
 | rex "Caused by:\s*(?P<Causedby>.*)"
 | rex "(?<javaException>java[x]?\..*Exception)"
