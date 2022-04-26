@@ -47,3 +47,11 @@ index="myindex" AMQ OR ARJUNA OR COM OR EJBCLIENT OR ELY OR HCANN OR HHH OR HSEA
 | eval precentagePerServer=round((totalCount/_totalPerServer)*100,2) | sort -precentagePerServer
 | stats list(precentagePerServer) as Percentage list(totalCount) as Counts list(ErrorCode) as ErrorCode by servername 
 | sort - totalCount | lookup jboss-errors.csv ErrorCode  OUTPUT  description
+
+  
+ ## Release Timeline Jboss,Wildfly
+ index=myindex WFLY* | rex field=source "\/data\/(?<product>\w+)\/(?<date>\d+)\/(?<server>\w+)" |rex "(?<JbossErrorCode>WFLY[^:]+):" | rex "APPNAME\-(?<ReleaseVersion>\w+.\d+.\d+)"| search JbossErrorCode=WFLYSRV0027 "*.war"|  table _time server JbossErrorCode ReleaseVersion
+
+| eval start=_time
+| rename bank as group, ReleaseVersion as label
+| table group, label, start, data, tooltip
