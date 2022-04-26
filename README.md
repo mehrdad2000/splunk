@@ -27,7 +27,7 @@ index="myindex" Caused* OR table* OR refuse* OR throw* OR ssl* OR "not found*" O
 | stats list(precentagePerServer) as Percentage list(totalCount) as Counts list(ExceptionName) as ExceptionName by servername 
 | sort - totalCount
 
- ## Jboss
+ ## Jboss Exceptions
  
 index="myindex" AMQ OR ARJUNA OR COM OR EJBCLIENT OR ELY OR HCANN OR HHH OR HSEARCH OR HV OR IJ OR ISNPHIB OR ISPN OR JBERET OR JBREM OR JBTHR OR JBWEB OR JBWS OR JIPI OR JNDIWFHTTP OR MODCLUSTER OR MSC OR PBOX OR PROBE OR RESTEASY OR TXNWFHTTP OR UT OR UTJS OR VFS OR WELD OR WFCMTOOL OR WFHTTP OR WFHTTPEJB OR WFLY* OR WFMIGRCLI OR WFNAM OR WFSM OR WFTXN OR XNIO OR jlibaio  | rex field=source "\/data\/(?<product>\w+)\/(?<date>\d+)\/(?<servername>\w+)" 
 |rex "(?<ErrorCode1>WFLY[^:]+):" 
