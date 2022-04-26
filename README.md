@@ -55,3 +55,7 @@ index="myindex" AMQ OR ARJUNA OR COM OR EJBCLIENT OR ELY OR HCANN OR HHH OR HSEA
 | eval start=_time
 | rename bank as group, ReleaseVersion as label
 | table group, label, start, data, tooltip
+
+  
+ ## Fail login Timeline By User
+  index="myindex"| search "ERROR [APP] User * invalid:"  |rex field=_raw "User\s(?<username>[^\s]+)"| rex "LoginException:\s+(?<message>.*)"    | table _time username message
