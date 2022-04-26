@@ -6,6 +6,11 @@ index="myindex"  fatal* OR err* OR exception* OR timeout* OR waiting* OR fail* O
 | cluster showcount=t t=0.7 labelonly=t | table _time cluster_count cluster_label _raw  | dedup 1 cluster_label | sort - cluster_count cluster_label _time  | chart values(cluster_count) as count by _raw  | sort limit=20 - count 
 |rex "(?<_raw>[^\n]*)\n"
 
+## Error Timechart
+index="myindex"  err* 
+| rex field=source "\/data\/(?<product>\w+)\/(?<date>\d+)\/(?<server>\w+)"   
+| timechart  count by server usenull=f useother=f
+
 ## Java Exceptions
 index="myindex" Caused* OR table* OR refuse* OR throw* OR ssl* OR "not found*" OR alert* OR db* OR sql* OR "not valid*" OR full* OR busy* OR down* OR terminate* OR timeout* OR "can't*" OR not* OR fault* OR fatal* OR informix* OR warn* OR fail* OR err* OR  Exception*   
 
