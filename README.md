@@ -21,8 +21,24 @@ index="myindex" Caused* OR table* OR refuse* OR throw* OR ssl* OR "not found*" O
 | fields ExceptionName, servername 
 | stats count(ExceptionName) as totalCount by servername, ExceptionName
 | eventstats sum(totalCount) as _total
-| eventstats sum(totalCount) as _totalPerBank by servername
+| eventstats sum(totalCount) as _totalPerServer by servername
 | eval percentageTotal=round((totalCount/_total)*100,2) 
 | eval precentagePerServer=round((totalCount/_totalPerServer)*100,2) | sort -precentagePerServer
 | stats list(precentagePerServer) as Percentage list(totalCount) as Counts list(ExceptionName) as ExceptionName by servername 
 | sort - totalCount
+
+ ## Jboss
+ 
+index="myindex" AMQ OR ARJUNA OR COM OR EJBCLIENT OR ELY OR HCANN OR HHH OR HSEARCH OR HV OR IJ OR ISNPHIB OR ISPN OR JBERET OR JBREM OR JBTHR OR JBWEB OR JBWS OR JIPI OR JNDIWFHTTP OR MODCLUSTER OR MSC OR PBOX OR PROBE OR RESTEASY OR TXNWFHTTP OR UT OR UTJS OR VFS OR WELD OR WFCMTOOL OR WFHTTP OR WFHTTPEJB OR WFLY* OR WFMIGRCLI OR WFNAM OR WFSM OR WFTXN OR XNIO OR jlibaio  | rex field=source "\/data\/(?<product>\w+)\/(?<date>\d+)\/(?<servername>\w+)" 
+|rex "(?<ErrorCode1>WFLY[^:]+):" 
+| rex "(?<ErrorCode2>(AMQ|ARJUNA|COM|EJBCLIENT|ELY|HCANN|HHH|HSEARCH|HV|IJ|ISNPHIB|ISPN|JBERET|JBREM|JBTHR|JBWEB|JBWS|JIPI|JNDIWFHTTP|MODCLUSTER|MSC|PBOX|PROBE|RESTEASY|TXNWFHTTP|UT|UTJS|VFS|WELD|WFCMTOOL|WFHTTP|WFHTTPEJB|WFLY*|WFMIGRCLI|WFNAM|WFSM|WFTXN|XNIO|jlibaio)\d+)" 
+| eval ErrorCode=coalesce(ErrorCode1,ErrorCode2)
+
+| fields ErrorCode, servername 
+| stats count(ErrorCode) as totalCount by servername, ErrorCode
+| eventstats sum(totalCount) as _total
+| eventstats sum(totalCount) as _totalPerServer by servername
+| eval percentageTotal=round((totalCount/_total)*100,2) 
+| eval precentagePerServer=round((totalCount/_totalPerServer)*100,2) | sort -precentagePerServer
+| stats list(precentagePerServer) as Percentage list(totalCount) as Counts list(ErrorCode) as ErrorCode by servername 
+| sort - totalCount | lookup jboss-errors.csv ErrorCode  OUTPUT  description
