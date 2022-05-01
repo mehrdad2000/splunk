@@ -1,5 +1,10 @@
 # splunk
 
+  ##show first line of multiline log (abstract=1) 
+
+  ##detect anomalies (anomalies)
+
+
 ## Cluster Errors (trim first lines for exception)
 index="myindex"  fatal* OR err* OR exception* OR timeout* OR waiting* OR fail* OR unable* OR lock* OR block*
 
@@ -60,5 +65,4 @@ index="myindex" AMQ OR ARJUNA OR COM OR EJBCLIENT OR ELY OR HCANN OR HHH OR HSEA
  ## Fail login Timeline By User
   index="myindex"| search "ERROR [APP] User * invalid:"  |rex field=_raw "User\s(?<username>[^\s]+)"| rex "LoginException:\s+(?<message>.*)"    | table _time username message
   
-  ##show first line of multiline log (abstract=1) 
-  ##detect anomalies (anomalies)
+
