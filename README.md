@@ -61,3 +61,4 @@ index="myindex" AMQ OR ARJUNA OR COM OR EJBCLIENT OR ELY OR HCANN OR HHH OR HSEA
   index="myindex"| search "ERROR [APP] User * invalid:"  |rex field=_raw "User\s(?<username>[^\s]+)"| rex "LoginException:\s+(?<message>.*)"    | table _time username message
   
   ##show first line of multiline log (abstract=1) 
+  ##detect anomalies (anomalies)
