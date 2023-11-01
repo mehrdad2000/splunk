@@ -64,6 +64,16 @@ index="myindex" AMQ OR ARJUNA OR COM OR EJBCLIENT OR ELY OR HCANN OR HHH OR HSEA
   
  ## Fail login Timeline By User
   index="myindex"| search "ERROR [APP] User * invalid:"  |rex field=_raw "User\s(?<username>[^\s]+)"| rex "LoginException:\s+(?<message>.*)"    | table _time username message
+
+## Find transaction Flow
+index="myindex"  
+|rex "ID\[(?<ID>\d+)" 
+| rex "^\S+\s\S+\s+(?<module>[^:]+)\w*" 
+| rex "T\[(?<Type>\d+)" 
+| stats    list(module) as modules  by  ID
+| eval modules=mvjoin(modules," ---> ")
+| stats list(ID)  count  by modules 
+| sort -count
   
 
 ## Links
